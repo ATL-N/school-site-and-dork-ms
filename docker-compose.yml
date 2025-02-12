@@ -25,7 +25,7 @@ services:
       - traefik.http.routers.school2-https.tls=true
       - traefik.http.routers.school2-https.tls.certresolver=le
       - traefik.http.routers.school2-https.service=school2-service
-      - traefik.http.services.school2-service.loadbalancer.server.port=3000
+      - traefik.http.services.school2-service.loadbalancer.server.port=3006
     depends_on:
       db:
         condition: service_healthy
