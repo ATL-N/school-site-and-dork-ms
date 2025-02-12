@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "${APP_PORT:-3006}:3006"
+      - "${APP_PORT:-3002}:3002"
     env_file:
      - .env
     environment:
@@ -15,7 +15,7 @@ services:
       - NEXTAUTH_URL=https://${DOMAIN}
       - NODE_ENV=production
       - DB_HOST=${DB_HOST}
-      - PORT=3006
+      - PORT=3002
 
     labels:
       - traefik.enable=true
@@ -27,7 +27,7 @@ services:
       - traefik.http.routers.school2-https.tls=true
       - traefik.http.routers.school2-https.tls.certresolver=le
       - traefik.http.routers.school2-https.service=school2-service
-      - traefik.http.services.school2-service.loadbalancer.server.port=3006
+      - traefik.http.services.school2-service.loadbalancer.server.port=3002
     depends_on:
       db:
         condition: service_healthy
@@ -36,7 +36,7 @@ services:
       - web
       - traefik-public
     healthcheck:
-      test: ["CMD", "wget", "--spider", "http://localhost:3000/api/health"]
+      test: ["CMD", "wget", "--spider", "http://localhost:3002/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3
