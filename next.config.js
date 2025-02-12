@@ -1,4 +1,9 @@
 module.exports = {
+  output: "standalone", // Important for Docker deployments
+  images: {
+    unoptimized: true, // This can help with image loading in Docker
+    domains: [], // Add any external domains if needed
+  },
   async headers() {
     return [
       {
@@ -13,8 +18,3 @@ module.exports = {
     ];
   },
 };
-
-// // next.config.js
-// module.exports = {
-//   output: 'standalone'
-// }
