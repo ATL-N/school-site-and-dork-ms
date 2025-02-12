@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight, Maximize } from "lucide-react";
+import Image from "next/image";
 
 const facilities = [
   {
@@ -64,15 +65,16 @@ export default function FacilityTour() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [fadeIn, setFadeIn] = useState(true);
+  const [imageErrors, setImageErrors] = useState({});
   const autoSlideTimer = useRef(null);
-  const SLIDE_INTERVAL = 5000; // 5 seconds
+  const SLIDE_INTERVAL = 5000;
 
   const nextFacility = () => {
     setFadeIn(false);
     setTimeout(() => {
       setCurrentFacility((prev) => (prev + 1) % facilities.length);
       setFadeIn(true);
-    }, 300); // Match this with CSS transition duration
+    }, 300);
   };
 
   const prevFacility = () => {
@@ -99,7 +101,6 @@ export default function FacilityTour() {
     setIsFullscreen(!isFullscreen);
   };
 
-  // Auto-slide functionality
   useEffect(() => {
     const startAutoSlide = () => {
       if (!isHovered) {
@@ -114,11 +115,17 @@ export default function FacilityTour() {
     };
 
     startAutoSlide();
-
     return () => stopAutoSlide();
   }, [isHovered]);
 
   const facility = facilities[currentFacility];
+
+  const handleImageError = (facilityId) => {
+    setImageErrors((prev) => ({
+      ...prev,
+      [facilityId]: true,
+    }));
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-4 lg:px-4 py-4">
@@ -136,26 +143,38 @@ export default function FacilityTour() {
       >
         {/* Image Section */}
         <div className="relative h-96">
-          <img
-            src={facility.imageUrl}
-            alt={facility.name}
-            className={`w-full h-full object-cover transition-opacity duration-300 ${
-              fadeIn ? "opacity-100" : "opacity-0"
-            }`}
-          />
+          {imageErrors[facility.id] ? (
+            <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+              Image not available
+            </div>
+          ) : (
+            <div className="relative w-full h-full">
+              <Image
+                src={facility.imageUrl}
+                alt={facility.name}
+                fill
+                sizes="(max-width: 1280px) 100vw, 1280px"
+                priority={currentFacility === 0}
+                className={`object-cover transition-opacity duration-300 ${
+                  fadeIn ? "opacity-100" : "opacity-0"
+                }`}
+                onError={() => handleImageError(facility.id)}
+              />
+            </div>
+          )}
 
           {/* Navigation Buttons */}
           <div className="absolute inset-0 flex items-center justify-between p-4">
             <button
               onClick={prevFacility}
-              className="p-2 rounded-full bg-white/80 hover:bg-white transition shadow-lg"
+              className="p-2 rounded-full bg-white/80 hover:bg-white transition shadow-lg z-10"
               style={{ color: "var(--primary-color)" }}
             >
               <ChevronLeft size={24} />
             </button>
             <button
               onClick={nextFacility}
-              className="p-2 rounded-full bg-white/80 hover:bg-white transition shadow-lg"
+              className="p-2 rounded-full bg-white/80 hover:bg-white transition shadow-lg z-10"
               style={{ color: "var(--primary-color)" }}
             >
               <ChevronRight size={24} />
@@ -165,7 +184,7 @@ export default function FacilityTour() {
           {/* Fullscreen Button */}
           <button
             onClick={toggleFullscreen}
-            className="absolute top-4 right-4 p-2 rounded-full bg-white/80 hover:bg-white transition shadow-lg"
+            className="absolute top-4 right-4 p-2 rounded-full bg-white/80 hover:bg-white transition shadow-lg z-10"
             style={{ color: "var(--primary-color)" }}
           >
             <Maximize size={24} />

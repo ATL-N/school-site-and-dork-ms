@@ -1,6 +1,6 @@
 services:
   nextjs:
-    image: nextjs-app:${VERSION:-0.1.0}
+    image: dork-school-web-and-ms-app:${VERSION:-0.1.0}
     build:
       context: .
       dockerfile: Dockerfile
