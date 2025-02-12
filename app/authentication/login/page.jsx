@@ -7,8 +7,8 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("adminadmin");
+  const [password, setPassword] = useState("0551577446");
   const [error, setError] = useState("");
   const [disableBtn, setDisableBtn] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
