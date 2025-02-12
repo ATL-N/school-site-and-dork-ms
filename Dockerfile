@@ -2,12 +2,10 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Install PostgreSQL client and other dependencies
-RUN apk update && \
-    apk add --no-cache postgresql-client curl
+# Copy package.json and package-lock.json
+COPY package*.json ./
 
 # Install dependencies
-COPY package*.json ./
 RUN npm ci
 
 # Copy source code
@@ -37,7 +35,7 @@ COPY --from=builder /app/node_modules ./node_modules
 EXPOSE 3000
 
 # Add healthcheck
-# HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-#     CMD curl -f http://localhost:3000/api/health || exit 1
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:3000/api/health || exit 1
 
 CMD ["npm", "start"]
