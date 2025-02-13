@@ -124,8 +124,8 @@ export default function Navbar() {
 
               {/* External Link Button */}
               <a
-                href="/pages" // Replace with actual portal URL
-                // target="_blank"
+                href="https://dorkmspreview.dorkordi.site/authentication/login" //"/pages" // Replace with actual portal URL
+                target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center px-4 py-2 rounded-full text-white transition-all duration-200 hover:opacity-90 hover:scale-105"
                 style={{ backgroundColor: "var(--primary-color)" }}
